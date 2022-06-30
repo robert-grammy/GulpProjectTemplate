@@ -1,0 +1,55 @@
+//MEDIA MIXIN
+
+$screens: (all, 1600, 1280, 992, 768, 480, 320);
+$screens-count: 7;
+
+@mixin media-exact($css, $values) {
+	@for $i from 1 through $screens-count { 
+        @if nth($values, $i) != ''{ 
+            @if nth($screens, $i) == 'all'{ 
+                #{$css}: unquote(#{nth($values, $i)});
+            } @else {
+            	@if $i == 2 {
+            		@media screen and (min-width: (nth($screens, $i) + 1 + 'px')) {
+                    	#{$css}: unquote(#{nth($values, $i)});
+                	}
+            	} @else if $i > 1 {
+                	@media screen and (min-width: (nth($screens, $i) + 1 + 'px')) and (max-width: (nth($screens, $i - 1) + 'px')) {
+                    	#{$css}: unquote(#{nth($values, $i)});
+                	}
+                	@if $i == $screens-count {
+                		@media screen and (max-width: (nth($screens, $i) + 'px')) {
+                    		#{$css}: unquote(#{nth($values, $i)});
+                		}
+                	}
+            	}
+            }
+        }
+    }
+}
+
+@mixin media($css, $values) {
+	@for $i from 1 through $screens-count { 
+        @if nth($values, $i) != ''{ 
+            @if nth($screens, $i) == 'all'{ 
+                #{$css}: unquote(#{nth($values, $i)});
+            } @else {
+            	@media screen and (max-width: (nth($screens, $i) + 'px')) {
+                   	#{$css}: unquote(#{nth($values, $i)});
+                }
+            }
+        }
+    }
+}
+
+//FONTS MIXIN
+
+@mixin font($font_name, $file_name, $weight, $style) {
+    @font-face {
+        font-family: $font_name;
+        font-display: swap;
+        src: url("../fonts/#{$file_name}.woff") format("woff"), url("../fonts/#{$file_name}.woff2") format("woff2");
+        font-weight: #{$weight};
+        font-style: #{$style};
+    }
+}
